@@ -1,6 +1,8 @@
 import pandas as pd
 import math
 from stars_processor import stars_processor
+import info
+from operator import itemgetter
 
 col_def = pd.read_fwf('../data/bsc_label.txt', header=None, colspecs=(
     (0,4),
@@ -10,7 +12,6 @@ col_def = pd.read_fwf('../data/bsc_label.txt', header=None, colspecs=(
     (23,34)
 ))
 
-# print(col_def)
 star_col_def = []
 column_names = []
 
@@ -125,18 +126,19 @@ for _, line in star_def.iterrows():
     # Create a new Star object and add it to the list of stars
     stars.append(Star(hr_name, name, dm_name, hd_name, sao_name, spectral_type, mag, ra, dec, rot_vel))
 
-tau = []
+known_consts = info.get_available_consts()
+designed_stars = []
 
 for s in stars:
-    if s.const =='Tau':
-        tau.append([s.hr_name, s.const, s.name, s.spectral_type, [s.x, s.y], s.mag, s.rot_vel, s.temp, s.lum])
-        # print(s.hr_name, s.const, s.name, spectral_type, [s.x, s.y], s.mag, s.rot_vel)
+    if s.const in known_consts:
+        designed_stars.append([s.hr_name, s.const, s.name, s.spectral_type, [s.x, s.y], s.mag, s.rot_vel, s.temp, s.lum])
 
-for each in tau:
+designed_stars = sorted(designed_stars, key=itemgetter(1))
+
+for each in designed_stars:
     print(each)
 
-# DEBUG print(len(tau))
-print(star_def.columns)
+# DEBUG print(star_def.columns)
 
 # [(s.x, s.y, s.mag) for s in stars if s.const=='Cas'][:5]
 
