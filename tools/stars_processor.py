@@ -1,7 +1,7 @@
 import re
 from math import floor, modf
 import numpy as np
-import info
+import tools.info as info
 
 class stars_processor():
     def __init__(self):
@@ -52,7 +52,6 @@ class stars_processor():
         # print(name.groups())
         star_num = name.group(1)
         Durchmusterung_name = f'{name.group(3)}'
-        print(name.groups())
         Durchmusterung_name = Durchmusterung_name.lstrip(const)
         
         return star_num, Durchmusterung_name

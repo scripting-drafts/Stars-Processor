@@ -1,7 +1,8 @@
-import regex_bsc_parser
+import tools.regex_bsc_parser as regex_bsc_parser
 import sys
 import csv
-import info
+import tools.info as info
+import pathlib
 
 known_consts = info.get_available_consts()
 
@@ -32,6 +33,14 @@ def display_stars(stars):
 
     return datalist
 
+def generate_csv(const, datalist):
+    keys = datalist[0].keys()
+    pathlib.Path('data/csv').mkdir(parents=True, exist_ok=True)
+    
+    with open(f'data/csv/{const}_consts_catalog.csv', 'w', encoding='ascii', newline='') as f:
+        dict_writer = csv.DictWriter(f, keys, dialect='excel', delimiter=';')
+        dict_writer.writeheader()
+        dict_writer.writerows(datalist)
 
 if sys.argv:
     if sys.argv[1:]:
@@ -39,24 +48,20 @@ if sys.argv:
             info.help_module()
 
         elif sys.argv[1] in known_consts:
-            stars, n = regex_bsc_parser.get_stars_in_constellation(sys.argv[1])
-            regex_bsc_parser.generate_stars_map(stars, n, sys.argv[1])
+            const = sys.argv[1]
+            stars, n = regex_bsc_parser.get_stars_in_constellation(const)
+            regex_bsc_parser.generate_stars_map(stars, n, const)
 
             if n==0:
-                print('Constellation {:s} not found.'.format(sys.argv[1]))
+                print('Constellation {:s} not found.'.format(const))
                 sys.exit(1)
 
             else:
-                print('Found {:d} stars in the constellation {:s}'.format(n,sys.argv[1]))
+                print('Found {:d} stars in the constellation {:s}'.format(n, const))
                 print('equinox J2000, epoch 2000.0')
                 datalist = display_stars(stars)
 
-            # keys = datalist[0].keys()
-
-            # with open(f'../data/{sys.argv[1]}_catalog.csv', 'w', encoding='ascii', newline='') as f:
-            #     dict_writer = csv.DictWriter(f, keys, dialect='excel', delimiter=';')
-            #     dict_writer.writeheader()
-            #     dict_writer.writerows(datalist)
+                generate_csv(const, datalist)
 
     elif not sys.argv[1:]:
         consts = info.get_available_consts()
@@ -66,12 +71,7 @@ if sys.argv:
             stars, _ = regex_bsc_parser.get_stars_in_constellation(const)
             datalist = display_stars(stars)
 
-            keys = datalist[0].keys()
-
-            with open(f'../data/consts_catalog.csv', 'w', encoding='ascii', newline='') as f:
-                dict_writer = csv.DictWriter(f, keys, dialect='excel', delimiter=';')
-                dict_writer.writeheader()
-                dict_writer.writerows(datalist)
+            generate_csv(const, datalist)
 
 else:
     print('''usage:

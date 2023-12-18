@@ -1,8 +1,11 @@
 import re
+import os
+bsc5_labels_path = os.path.abspath(r'data/bsc_label.txt')
+bsc5_path = os.path.abspath(r'data/bsc5.dat')
 
 def list_constellation_entries():
     const_list = []
-    with open(r'..\data\bsc5.dat', 'r') as fi:
+    with open(bsc5_path, 'r') as fi:
         for line in fi.readlines():
             if not re.match('\\d+', line[11:14]) and not ' ' in line[11:14]:
                 const_abr = line[11:14]
@@ -18,7 +21,7 @@ def help_module():
 
 def get_available_consts():
     const_list = []
-    with open(r'..\data\bsc5.dat', 'r') as fi:
+    with open(bsc5_path, 'r') as fi:
         for line in fi.readlines():
             if not re.match('\\d+', line[11:14]) and not ' ' in line[11:14]:
                 const_abr = line[11:14]

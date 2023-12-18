@@ -1,6 +1,7 @@
 # Source: http://
 import math
-from stars_processor import stars_processor
+from tools.stars_processor import stars_processor
+from tools.info import bsc5_path
 
 class Star():
     """
@@ -53,7 +54,7 @@ def get_stars_in_constellation(constellation):
     '''
 
     stars = []
-    with open(r'..\data\bsc5.dat', 'r') as fi:
+    with open(bsc5_path, 'r') as fi:
         for line in fi.readlines():
             source = line.strip()
             const = line[11:14]
@@ -124,7 +125,7 @@ def generate_stars_map(stars, n, constellation):
     width = int(height * aspect_ratio)
 
     # Write the SVG image file for the constellation
-    with open(r'../data/{:s}.svg'.format(constellation), 'w') as f:
+    with open(r'../../data/{:s}.svg'.format(constellation), 'w') as f:
         print('<?xml version="1.0" encoding="utf-8"?>', file=f)
         print('<svg xmlns="http://www.w3.org/2000/svg"', file=f)
         print('     xmlns:xlink="http://www.w3.org/1999/xlink"', file=f)

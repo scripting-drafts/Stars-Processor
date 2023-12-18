@@ -1,10 +1,10 @@
 import pandas as pd
 import math
-from stars_processor import stars_processor
-import info
+from tools.stars_processor import stars_processor
+import tools.info as info
 from operator import itemgetter
 
-col_def = pd.read_fwf('../data/bsc_label.txt', header=None, colspecs=(
+col_def = pd.read_fwf(info.bsc5_labels_path, header=None, colspecs=(
     (0,4),
     (5,9),
     (9,17),
@@ -22,10 +22,10 @@ for _, (n1, n2, _, _, name) in col_def.iterrows():
         star_col_def.append((int(n2)-1, int(n2)))
     column_names.append(name)
 
-star_def = pd.read_fwf('../data/bsc5.dat', header=None, colspecs=star_col_def)
+star_def = pd.read_fwf(info.bsc5_path, header=None, colspecs=star_col_def)
 star_def.columns = column_names
 
-col_def = pd.read_fwf('../data/bsc_label.txt', header=None, colspecs=(
+col_def = pd.read_fwf(info.bsc5_labels_path, header=None, colspecs=(
     (0,4),
     (5,9),
     (9,17),
@@ -33,7 +33,7 @@ col_def = pd.read_fwf('../data/bsc_label.txt', header=None, colspecs=(
     (23,34)
 ))
 
-star_def = pd.read_fwf('../data/bsc5.dat', header=None, colspecs=star_col_def)
+star_def = pd.read_fwf(info.bsc5_path, header=None, colspecs=star_col_def)
 star_def.columns = column_names
 
 print(star_def.head())
@@ -138,7 +138,8 @@ designed_stars = sorted(designed_stars, key=itemgetter(1))
 for each in designed_stars:
     print(each)
 
-# DEBUG print(star_def.columns)
+# DEBUG:
+print(star_def.columns)
 
 # [(s.x, s.y, s.mag) for s in stars if s.const=='Cas'][:5]
 
